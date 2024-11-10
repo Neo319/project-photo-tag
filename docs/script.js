@@ -36,7 +36,35 @@ function createTarget(locations) {
   target.appendChild(target2);
 }
 
+async function imgClick(e) {
+  console.log(e.offsetX, e.offsetY);
+
+  // 1. dropdown menu
+  const dropdown = document.createElement("select");
+  const option1 = new Option("select one:", "", true, false); // Default option
+  const option2 = new Option("Waldo");
+
+  dropdown.add(option1);
+  dropdown.add(option2);
+
+  dropdown.classList = "dropdown";
+
+  //temp: assume only 1 location
+  const { offsetX: x, offsetY: y } = e;
+
+  dropdown.style.left = `${x}px`;
+  dropdown.style.top = `${y}px`;
+
+  mainDiv.appendChild(dropdown);
+
+  // clean up
+}
+
 loadImage(imgData.url);
 console.log("loaded image.");
 
-createTarget(imgData.locations);
+// createTarget(imgData.locations);
+
+mainDiv.addEventListener("click", (e) => {
+  imgClick(e);
+});
