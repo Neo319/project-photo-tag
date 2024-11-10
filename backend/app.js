@@ -1,8 +1,9 @@
 require("dotenv").config();
 
 const express = require("express");
-
 const app = express();
+
+//todo: import prisma client...
 
 app.get("/", (req, res) => {
   res.send("welcome to my backend...");
