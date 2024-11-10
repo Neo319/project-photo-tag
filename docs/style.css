@@ -3,9 +3,10 @@ img {
 }
 
 #main {
-  border: 2px solid gray;
-  padding: 1em;
   position: relative;
+  border: 10px solid blue;
+  max-width: min-content;
+  max-height: min-content;
 }
 
 .target {
@@ -15,4 +16,18 @@ img {
   border: 10px solid red;
 
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transform: translate(-50%, -50%);
+}
+.target2 {
+  width: 50px;
+  height: 50px;
+
+  position: relative;
+
+  border-radius: 100%;
+  border: 5px solid red;
 }

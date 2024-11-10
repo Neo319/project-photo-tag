@@ -5,8 +5,8 @@ const imgData = {
   url: "../src/91qfVY7.jpeg",
   locations: {
     Waldo: {
-      x: 63.6,
-      y: 50.3,
+      x: 72.8,
+      y: 59.9,
     },
   },
 };
@@ -21,7 +21,10 @@ function loadImage(url) {
 // reveal Waldo's location in the image with given pixel coordinates
 function createTarget(locations) {
   const target = document.createElement("div");
+  const target2 = document.createElement("div");
   target.classList = "target";
+
+  target2.classList = "target2";
 
   //temp: assume only 1 location
   const { x, y } = locations.Waldo;
@@ -30,6 +33,7 @@ function createTarget(locations) {
   target.style.top = `${y}%`;
 
   mainDiv.appendChild(target);
+  target.appendChild(target2);
 }
 
 loadImage(imgData.url);
