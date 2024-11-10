@@ -3,10 +3,15 @@ console.log("hello world");
 // mock db
 const imgData = {
   url: "../src/91qfVY7.jpeg",
+  resolution: {
+    x: 3505,
+    y: 2226,
+  },
   locations: [
     {
       name: "Waldo",
-      // TBD
+      x: 2557,
+      y: 1340,
     },
   ],
 };
@@ -66,6 +71,9 @@ document.addEventListener("click", (e) => {
   //opening dropdown
   if (!dropdownIsOpen && mainDiv.contains(e.target)) {
     console.log(1);
+
+    console.log(e.offsetX, e.offsetY);
+
     createDropDown(e);
     createTarget(e);
     dropdownIsOpen = true;
@@ -79,3 +87,5 @@ document.addEventListener("click", (e) => {
     }
   }
 });
+
+// TODO: create function that can normalize click pixel position in various screen sizes.
