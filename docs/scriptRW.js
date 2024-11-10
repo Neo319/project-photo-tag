@@ -11,17 +11,22 @@ const imgData = {
   ],
 };
 
+let dropdownIsOpen = false;
+
 // DOM pieces
 const mainDiv = document.getElementById("main");
 const img = document.querySelector("img");
 
 const targetBox = document.createElement("div"); // to be used later
 targetBox.id = "targetBox";
-targetBox.hidden = true;
+// targetBox.hidden = true;
 
 const dropdown = document.createElement("select"); // to be used later
 dropdown.id = "dropdown";
-dropdown.hidden = true;
+// dropdown.hidden = true;
+
+mainDiv.appendChild(targetBox);
+mainDiv.appendChild(dropdown);
 
 const createDropDownOptions = (() => {
   dropdown.add(new Option("Which character is here? Choose one:", false, true));
@@ -43,8 +48,6 @@ function createTarget(e) {
   targetBox.style.top = `${y}px`;
   targetBox.style.left = `${x}px`;
   targetBox.hidden = false;
-
-  mainDiv.appendChild(targetBox);
 }
 
 function createDropDown(e) {
@@ -54,14 +57,25 @@ function createDropDown(e) {
   dropdown.style.top = `${y}px`;
   dropdown.style.left = `${x}px`;
   dropdown.hidden = false;
-
-  mainDiv.appendChild(dropdown);
 }
 
 loadImage(imgData.url);
 
-// add a target box, and add a dropdown menu
-mainDiv.addEventListener("click", (e) => {
-  createTarget(e);
-  createDropDown(e);
+// main click handler
+document.addEventListener("click", (e) => {
+  //opening dropdown
+  if (!dropdownIsOpen && mainDiv.contains(e.target)) {
+    console.log(1);
+    createDropDown(e);
+    createTarget(e);
+    dropdownIsOpen = true;
+  } else if (dropdownIsOpen) {
+    // closing dropdown
+    if (!dropdown.contains(e.target)) {
+      console.log(2);
+      dropdown.hidden = true;
+      targetBox.hidden = true;
+      dropdownIsOpen = false;
+    }
+  }
 });
