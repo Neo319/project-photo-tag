@@ -1,5 +1,8 @@
 console.log("hello world");
 
+//tracking state
+dropDownIsOpen = false;
+
 // mock db
 const imgData = {
   url: "../src/91qfVY7.jpeg",

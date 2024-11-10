@@ -14,30 +14,13 @@ img {
   max-height: min-content;
 }
 
-.target {
-  width: 10vw;
-  height: 10vw;
-  border-radius: 100%;
-  border: 10px solid red;
+#targetBox {
+  width: 10px;
+  height: 10px;
 
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  transform: translate(-50%, -50%);
-}
-.target2 {
-  width: 5vw;
-  height: 5vw;
-
-  position: relative;
-
-  border-radius: 100%;
-  border: 5px solid red;
-}
-
-.dropdown {
-  position: absolute;
   border: 2px solid red;
+  position: absolute;
+
+  /* center the box on user click */
+  transform: translate(-50%, -50%);
 }
