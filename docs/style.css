@@ -15,12 +15,16 @@ img {
 }
 
 #targetBox {
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
 
   border: 2px solid red;
   position: absolute;
 
   /* center the box on user click */
   transform: translate(-50%, -50%);
+}
+
+#dropdown {
+  position: absolute;
 }
