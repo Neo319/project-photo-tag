@@ -2,7 +2,7 @@ console.log("hello world");
 
 // mock db
 const imgData = {
-  url: "../src/91qfVY7.jpeg",
+  url: "../src/t4FmRgW.jpeg",
   resolution: {
     x: 3505,
     y: 2226,
