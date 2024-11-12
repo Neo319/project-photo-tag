@@ -13,7 +13,23 @@ const images_get = async (req, res) => {
   }
 };
 
+const image_get = async (req, res) => {
+  try {
+    const image = await prisma.image.findUnique({
+      where: {
+        id: parseInt(req.params.id),
+      },
+    });
+    res.send(JSON.stringify(image));
+    return image;
+  } catch (err) {
+    console.error("error getting image", err.message);
+    return err;
+  }
+};
+
 module.exports = {
   images_get,
+  image_get,
   //
 };
