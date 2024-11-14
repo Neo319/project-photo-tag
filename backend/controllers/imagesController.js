@@ -30,6 +30,8 @@ const image_get = async (req, res) => {
 
 // TODO:
 // route for user click (compare with db)
+
+// send as param img data as JSON, with: click{x, y}; res{x, y}, imgId
 const click_get = async (req, res) => {
   try {
     const clickX = req.params.x;
