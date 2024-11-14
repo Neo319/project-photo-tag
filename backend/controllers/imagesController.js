@@ -30,66 +30,85 @@ const image_get = async (req, res) => {
 
 // TODO:
 // route for user click (compare with db)
-
 const click_get = async (req, res) => {
-  // get click coordinates
-  const clickX = req.params.x;
-  const clickY = req.params.y;
-  const imageId = parseInt(req.params.imageId); // which image to compare to
+  try {
+    const clickX = req.params.x;
+    const clickY = req.params.y;
+    const imageId = parseInt(req.params.imageId); // which image to compare to
 
-  // NORMALIZE location:
-  function normalize(coord, resolution) {
-    return (coord / resolution) * 100;
-  }
-
-  // FETCH image resolution
-  const image = await prisma.image.findUnique({
-    where: {
-      id: imageId,
-    },
-    select: {
-      resolution: true,
-      locations: true,
-    },
-  });
-
-  // the image's resolution
-  const x = image.resolution.x;
-  const y = image.resolution.y;
-
-  //the locations to compare against
-  const locations = image.locations;
-
-  // where the user clicked, normalized
-  const normalClickX = normalize(clickX, x);
-  const normalClickY = normalize(clickY, y);
-
-  // where comparison occurs
-  locations.map((location) => {
-    // ---- LOCATIONS normalized here ----
-    const normalLoc = {
-      x: normalize(location.x, x),
-      y: (normalize(location.y), y),
-    };
-
-    // compare normalized locations data with normalized user click data
-    if (compare(normalLoc, { x: normalClickX, y: normalClickY })) {
-      // location successfully matched
-      console.log("success 2!");
-      res.send(location.name);
-      return true;
+    // NORMALIZE location:
+    function normalize(coord, resolution) {
+      return Math.floor((coord / resolution) * 100);
     }
-  });
 
-  // function for comparison
-  async function compare(location, click) {
-    if (location.x == click.x && location.y == click.y) {
-      console.log("success!");
-      return location.name;
-    } else return false;
-    //
+    // FETCH image resolution
+    const image = await prisma.image.findUnique({
+      where: {
+        id: imageId,
+      },
+      select: {
+        resolution: true,
+        locations: true,
+      },
+    });
+
+    console.log(image);
+
+    // the image's resolution
+    const x = image.resolution.x;
+    const y = image.resolution.y;
+
+    //the locations to compare against
+    const locations = image.locations;
+
+    // where the user clicked, normalized
+    const normalClickX = normalize(clickX, x);
+    const normalClickY = normalize(clickY, y);
+
+    // where comparison occurs
+    locations.map((location) => {
+      // ---- LOCATIONS normalized here ----
+      const normalLoc = {
+        x: normalize(location.x, x),
+        y: normalize(location.y, y),
+      };
+
+      console.log(normalLoc);
+      console.log(compare(normalLoc, { x: normalClickX, y: normalClickY }));
+
+      // compare normalized locations data with normalized user click data
+      if (compare(normalLoc, { x: normalClickX, y: normalClickY })) {
+        // location successfully matched
+        console.log("success 2!");
+        res.send(location.name);
+        return true;
+      }
+    });
+
+    // function for comparison
+    function compare(location, click) {
+      console.log(
+        "comparing: " + JSON.stringify(location),
+        "to: " + JSON.stringify(click)
+      );
+      if (location.x == click.x && location.y == click.y) {
+        console.log("success!");
+        return true;
+      } else return false;
+      //
+    }
+
+    // no location found
+    res.send("no location found.");
+  } catch (err) {
+    console.error("error in click", err.message);
+    return err;
   }
 };
+
+// TODO:
+// click_get is buggy and seems to only return success 2, even with wrong coords.
+// NORMALIZE FUNCTION NEEDS WORK.
 
 module.exports = {
   images_get,
