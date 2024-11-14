@@ -5,7 +5,7 @@ const router = express.Router();
 router.post("/test", async (req, res) => {
   console.log("hi");
   console.log("body: ", req.body);
-  res.send("noting");
+  res.end("test complete");
 });
 
 const imagesController = require("../controllers/imagesController.js");
@@ -14,6 +14,6 @@ router.get("/", imagesController.images_get);
 
 router.get("/:id", imagesController.image_get);
 
-router.get("/click/clickData=:data", imagesController.click_get);
+router.post("/click/", imagesController.click_post);
 
 module.exports = router;

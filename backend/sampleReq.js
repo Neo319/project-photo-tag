@@ -2,15 +2,20 @@
 
 try {
   const JSONdata = {
-    x: 1,
-    y: 2,
+    click: {
+      x: 101,
+      y: 101,
+    },
+    resolution: {
+      x: 1000,
+      y: 1000,
+    },
+    imageId: 1,
   };
 
   // run the req, log result
   const run = (async () => {
-    const URLstring = "http://localhost:2000/images/test";
-
-    console.log(URLstring);
+    const URLstring = "http://localhost:2000/images/click";
     console.log("running test... ");
     const result = await fetch(URLstring, {
       method: "POST",

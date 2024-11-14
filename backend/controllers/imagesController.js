@@ -32,11 +32,21 @@ const image_get = async (req, res) => {
 // route for user click (compare with db)
 
 // send as param img data as JSON, with: click{x, y}; res{x, y}, imgId
-const click_get = async (req, res) => {
+const click_post = async (req, res) => {
   try {
-    const clickX = req.params.x;
-    const clickY = req.params.y;
-    const imageId = parseInt(req.params.imageId); // which image to compare to
+    const clickX = req.body.click.x;
+    const clickY = req.body.click.y;
+    const imageId = parseInt(req.body.imageId); // which image to compare to
+
+    const resolution = req.body.resolution; //
+
+    // ensure good request
+    if (!(clickX && clickY && imageId && resolution.x && resolution.y)) {
+      //missing information
+      console.log(req.body);
+      console.log("missing info");
+      res.status(400).message("Bad request: missing required params");
+    }
 
     // NORMALIZE location:
     function normalize(coord, resolution) {
@@ -115,6 +125,6 @@ const click_get = async (req, res) => {
 module.exports = {
   images_get,
   image_get,
-  click_get,
+  click_post,
   //
 };
