@@ -2,6 +2,12 @@ const DB_URL = "http://localhost:2000";
 
 let imageData = null;
 
+// DOM pieces
+const mainDiv = document.getElementById("main");
+const img = document.querySelector("img");
+
+//
+
 async function fetchImage() {
   // loads image and data from db when user presses start. activates game ...
 
@@ -25,40 +31,23 @@ async function fetchImage() {
   }
 }
 
-// mock db
-// const imgData = {
-//   url: "../src/t4FmRgW.jpeg",
-//   resolution: {
-//     x: 3505,
-//     y: 2226,
-//   },
-//   locations: [
-//     {
-//       name: "Waldo",
-//       x: 2557,
-//       y: 1340,
-//     },
-//   ],
-// };
-
 // ---- INITIATING APP STATE ----
 
 const begin = document.getElementById("load_img");
-
 begin.addEventListener("click", async () => {
   try {
-    launchApp(await fetchImage());
+    const img = await fetchImage();
+    launchApp(img);
   } catch (err) {
     console.error("error launching", err.message);
+    return err;
   }
 });
 
 function launchApp(imgData) {
   let dropdownIsOpen = false;
 
-  // DOM pieces
-  const mainDiv = document.getElementById("main");
-  const img = document.querySelector("img");
+  img.src = imgData.url;
 
   const targetBox = document.createElement("div"); // to be used later
   targetBox.id = "targetBox";
@@ -82,9 +71,6 @@ function launchApp(imgData) {
     });
   })();
 
-  function loadImage(url) {
-    img.src = url;
-  }
   // creates a target box for user's click
   function createTarget(e) {
     // get click location in px
@@ -104,14 +90,10 @@ function launchApp(imgData) {
     dropdown.hidden = false;
   }
 
-  loadImage(imgData.url);
-
   // main click handler
   document.addEventListener("click", (e) => {
     //opening dropdown
     if (!dropdownIsOpen && mainDiv.contains(e.target)) {
-      console.log(1);
-
       console.log(e.offsetX, e.offsetY);
 
       createDropDown(e);
@@ -120,13 +102,20 @@ function launchApp(imgData) {
     } else if (dropdownIsOpen) {
       // closing dropdown
       if (!dropdown.contains(e.target)) {
-        console.log(2);
         dropdown.hidden = true;
         targetBox.hidden = true;
         dropdownIsOpen = false;
       }
     }
+
+    // ---- VERIFYING CLICKS WITH DB ----
+    async function verify(click) {
+      //
+      // const fetchResult = await fetch(`${DB_URL}/images/click`);
+    }
   });
 
   // TODO: create function that can normalize click pixel position in various screen sizes.
+  // TODO: implement timer that counts down?
+  // TODO: implement db send to check clicks when option is selected...
 }
