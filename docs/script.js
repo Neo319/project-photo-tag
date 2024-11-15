@@ -1,5 +1,7 @@
 const DB_URL = "http://localhost:2000";
 
+let imageData = null;
+
 async function fetchImage() {
   // loads image and data from db when user presses start. activates game ...
 
@@ -7,7 +9,20 @@ async function fetchImage() {
   const randomId = Math.floor(Math.random() * 2) + 1; //
   console.log(randomId);
 
-  // const image = await fetch(`${DB_URL}/images/`)
+  try {
+    // initial db fetch
+    const fetchResult = await fetch(`${DB_URL}/images/${randomId}`, {
+      mode: "cors",
+    });
+    if (fetchResult.ok) {
+      // parsing db data
+      const result = await fetchResult.json();
+      return result;
+    }
+  } catch (err) {
+    console.error("error fetching image", err.message);
+    return err;
+  }
 }
 
 // mock db
