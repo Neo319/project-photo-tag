@@ -25,3 +25,7 @@
 #dropdown {
   position: absolute;
 }
+
+img {
+  max-width: 90vw;
+}

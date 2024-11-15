@@ -1,73 +1,101 @@
-console.log("hello world");
+const DB_URL = "http://localhost:2000";
 
-//tracking state
-dropDownIsOpen = false;
+async function fetchImage() {
+  // loads image and data from db when user presses start. activates game ...
+
+  // randomly select image from id 1-3
+  const randomId = Math.floor(Math.random() * 2) + 1; //
+  console.log(randomId);
+
+  // const image = await fetch(`${DB_URL}/images/`)
+}
 
 // mock db
 const imgData = {
-  url: "../src/91qfVY7.jpeg",
-  locations: {
-    Waldo: {
-      x: 72.8,
-      y: 59.9,
-    },
+  url: "../src/t4FmRgW.jpeg",
+  resolution: {
+    x: 3505,
+    y: 2226,
   },
+  locations: [
+    {
+      name: "Waldo",
+      x: 2557,
+      y: 1340,
+    },
+  ],
 };
+
+let dropdownIsOpen = false;
 
 // DOM pieces
 const mainDiv = document.getElementById("main");
 const img = document.querySelector("img");
 
+const targetBox = document.createElement("div"); // to be used later
+targetBox.id = "targetBox";
+// targetBox.hidden = true;
+
+const dropdown = document.createElement("select"); // to be used later
+dropdown.id = "dropdown";
+// dropdown.hidden = true;
+
+mainDiv.appendChild(targetBox);
+mainDiv.appendChild(dropdown);
+
+const createDropDownOptions = (() => {
+  dropdown.add(new Option("Which character is here? Choose one:", false, true));
+
+  //create locations based on imgData from db
+  imgData.locations.map((location) => {
+    dropdown.add(new Option(location.name));
+  });
+})();
+
 function loadImage(url) {
   img.src = url;
 }
-// reveal Waldo's location in the image with given pixel coordinates
-function createTarget(locations) {
-  const target = document.createElement("div");
-  const target2 = document.createElement("div");
-  target.classList = "target";
-
-  target2.classList = "target2";
-
-  //temp: assume only 1 location
-  const { x, y } = locations.Waldo;
-
-  target.style.left = `${x}%`;
-  target.style.top = `${y}%`;
-
-  mainDiv.appendChild(target);
-  target.appendChild(target2);
-}
-
-async function imgClick(e) {
-  console.log(e.offsetX, e.offsetY);
-
-  // 1. dropdown menu
-  const dropdown = document.createElement("select");
-  const option1 = new Option("select one:", "", true, false); // Default option
-  const option2 = new Option("Waldo");
-
-  dropdown.add(option1);
-  dropdown.add(option2);
-
-  dropdown.classList = "dropdown";
-
-  //temp: assume only 1 location
+// creates a target box for user's click
+function createTarget(e) {
+  // get click location in px
   const { offsetX: x, offsetY: y } = e;
 
-  dropdown.style.left = `${x}px`;
+  targetBox.style.top = `${y}px`;
+  targetBox.style.left = `${x}px`;
+  targetBox.hidden = false;
+}
+
+function createDropDown(e) {
+  // get click location in px
+  const { offsetX: x, offsetY: y } = e;
+
   dropdown.style.top = `${y}px`;
-
-  mainDiv.appendChild(dropdown);
-
-  // clean up
+  dropdown.style.left = `${x}px`;
+  dropdown.hidden = false;
 }
 
 loadImage(imgData.url);
-console.log("loaded image.");
 
-// createTarget(imgData.locations);
+// main click handler
+document.addEventListener("click", (e) => {
+  //opening dropdown
+  if (!dropdownIsOpen && mainDiv.contains(e.target)) {
+    console.log(1);
 
-mainDiv.addEventListener("click", (e) => {
-  imgClick(e);
+    console.log(e.offsetX, e.offsetY);
+
+    createDropDown(e);
+    createTarget(e);
+    dropdownIsOpen = true;
+  } else if (dropdownIsOpen) {
+    // closing dropdown
+    if (!dropdown.contains(e.target)) {
+      console.log(2);
+      dropdown.hidden = true;
+      targetBox.hidden = true;
+      dropdownIsOpen = false;
+    }
+  }
 });
+
+// TODO: create function that can normalize click pixel position in various screen sizes.
