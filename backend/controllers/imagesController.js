@@ -34,10 +34,9 @@ const image_get = async (req, res) => {
 // send as param img data as JSON, with: click{x, y}; res{x, y}, imgId
 const click_post = async (req, res) => {
   try {
-    console.log(req.body);
     const clickX = req.body.click.x;
     const clickY = req.body.click.y;
-    const imageId = parseInt(req.body.imageId); // which image to compare to
+    const imageId = parseInt(req.body.imgId); // which image to compare to
 
     const resolution = req.body.resolution; //
 
@@ -53,6 +52,8 @@ const click_post = async (req, res) => {
     function normalize(coord, resolution) {
       return Math.floor((coord / resolution) * 100);
     }
+
+    console.log(imageId);
 
     // FETCH image resolution
     const image = await prisma.image.findUnique({

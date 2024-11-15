@@ -103,8 +103,6 @@ function launchApp(imgData) {
   document.addEventListener("click", (e) => {
     //opening dropdown
     if (!dropdownIsOpen && mainDiv.contains(e.target)) {
-      console.log(e.offsetX, e.offsetY);
-
       createDropDown(e);
       createTarget(e);
       dropdownIsOpen = true;
@@ -122,13 +120,13 @@ function launchApp(imgData) {
 
   // getting selection
   dropdown.addEventListener("change", (e) => {
-    console.log(dropdown.value);
-    console.log(img);
-
     // get click data and send db query
 
     const click = {
-      click: clickTarget,
+      click: {
+        x: clickTarget.offsetX,
+        y: clickTarget.offsetY,
+      },
       resolution: {
         x: parseInt(img.width),
         y: parseInt(img.height),
@@ -140,9 +138,7 @@ function launchApp(imgData) {
   });
 
   async function verify(click) {
-    console.log(click);
     const clickJSON = JSON.stringify(click);
-    console.log(clickJSON);
 
     const fetchResult = await fetch(`${DB_URL}/images/click`, {
       method: "POST",
