@@ -130,8 +130,8 @@ function launchApp(imgData) {
     const click = {
       click: clickTarget,
       resolution: {
-        x: img.width,
-        y: img.height,
+        x: parseInt(img.width),
+        y: parseInt(img.height),
       },
       imgId,
     };
@@ -140,7 +140,17 @@ function launchApp(imgData) {
   });
 
   async function verify(click) {
-    // const fetchResult = await fetch(`${DB_URL}/images/click`);
+    console.log(click);
+    const clickJSON = JSON.stringify(click);
+    console.log(clickJSON);
+
+    const fetchResult = await fetch(`${DB_URL}/images/click`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: clickJSON,
+    });
   }
 
   // TODO: create function that can normalize click pixel position in various screen sizes.
