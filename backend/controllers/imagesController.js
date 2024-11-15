@@ -38,14 +38,29 @@ const click_post = async (req, res) => {
     const clickY = req.body.click.y;
     const imageId = parseInt(req.body.imgId); // which image to compare to
 
-    const resolution = req.body.resolution; //
-
+    // TODO: end if any do not meet specified paramaters...
     // ensure good request
-    if (!(clickX && clickY && imageId && resolution.x && resolution.y)) {
+
+    function isValidObject(obj) {
+      if (
+        obj?.click &&
+        typeof obj.click.x === "number" &&
+        typeof obj.click.y === "number" &&
+        obj?.resolution &&
+        typeof obj.resolution.y === "number" &&
+        typeof obj.resolution.x === "number" &&
+        typeof obj.imgId === "number"
+      ) {
+        console.log("yes");
+        return true;
+      } else return false;
+    }
+    console.log(req.body);
+    if (!isValidObject(req.body)) {
       //missing information
-      console.log(req.body);
+
       console.log("missing info");
-      res.status(400).send("Bad request: missing required params");
+      return res.status(400).send("Bad request: missing required params");
     }
 
     // NORMALIZE location:
