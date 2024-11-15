@@ -1,6 +1,8 @@
 const DB_URL = "http://localhost:2000";
 
 let imageData = null;
+let imgId = null;
+let clickTarget = {};
 
 // DOM pieces
 const mainDiv = document.getElementById("main");
@@ -23,6 +25,8 @@ async function fetchImage() {
     if (fetchResult.ok) {
       // parsing db data
       const result = await fetchResult.json();
+      //store img id for later use
+      imgId = randomId;
       return result;
     }
   } catch (err) {
@@ -67,7 +71,9 @@ function launchApp(imgData) {
 
     //create locations based on imgData from db
     imgData.locations.map((location) => {
-      dropdown.add(new Option(location.name));
+      const option = new Option(location.name);
+
+      dropdown.add(option);
     });
   })();
 
@@ -75,6 +81,9 @@ function launchApp(imgData) {
   function createTarget(e) {
     // get click location in px
     const { offsetX: x, offsetY: y } = e;
+
+    // store click location for later use
+    clickTarget = { offsetX: x, offsetY: y };
 
     targetBox.style.top = `${y}px`;
     targetBox.style.left = `${x}px`;
@@ -107,13 +116,32 @@ function launchApp(imgData) {
         dropdownIsOpen = false;
       }
     }
-
-    // ---- VERIFYING CLICKS WITH DB ----
-    async function verify(click) {
-      //
-      // const fetchResult = await fetch(`${DB_URL}/images/click`);
-    }
   });
+
+  // ---- VERIFYING CLICKS WITH DB ----
+
+  // getting selection
+  dropdown.addEventListener("change", (e) => {
+    console.log(dropdown.value);
+    console.log(img);
+
+    // get click data and send db query
+
+    const click = {
+      click: clickTarget,
+      resolution: {
+        x: img.width,
+        y: img.height,
+      },
+      imgId,
+    };
+
+    verify(click);
+  });
+
+  async function verify(click) {
+    // const fetchResult = await fetch(`${DB_URL}/images/click`);
+  }
 
   // TODO: create function that can normalize click pixel position in various screen sizes.
   // TODO: implement timer that counts down?
