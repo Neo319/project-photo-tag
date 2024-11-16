@@ -1,5 +1,8 @@
 const DB_URL = "http://localhost:2000";
 
+import success from "./modules/success.js";
+import message from "./modules/message.js";
+
 let imageData = null;
 let imgId = null;
 let clickTarget = {};
@@ -8,6 +11,7 @@ let locationName = null;
 // DOM pieces
 const mainDiv = document.getElementById("main");
 const img = document.querySelector("img");
+img.hidden = true;
 
 //
 
@@ -40,6 +44,11 @@ async function fetchImage() {
 
 const begin = document.getElementById("load_img");
 begin.addEventListener("click", async () => {
+  message("Find Waldo!");
+
+  img.hidden = false;
+  begin.disabled = true;
+
   try {
     const img = await fetchImage();
     launchApp(img);
@@ -159,10 +168,16 @@ function launchApp(imgData) {
       body: clickJSON,
     });
 
-    console.log(fetchResult);
-
     const result = await fetchResult.json();
     console.log(result);
+
+    if (result.success === true) {
+      success(click);
+      message(`You found ${locationName}!`);
+    } else {
+      message("incorrect!");
+      console.log("nope");
+    }
   }
 
   // TODO: create function that can normalize click pixel position in various screen sizes.

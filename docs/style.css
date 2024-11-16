@@ -1,3 +1,22 @@
+* {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+@keyframes messageSlide {
+  from {
+    top: 120%;
+  }
+  40% {
+    top: 50%;
+  }
+  70% {
+    top: 50%;
+  }
+  to {
+    top: -20%;
+  }
+}
+
 #container {
   border: 2px solid lightgray;
   border-radius: 8px;
@@ -9,6 +28,9 @@
   border: 10px solid blue;
   max-width: min-content;
   max-height: min-content;
+  overflow: hidden;
+
+  transition-duration: 500ms;
 }
 
 #targetBox {
@@ -28,4 +50,32 @@
 
 img {
   max-width: 90vw;
+}
+
+.circle {
+  border: 3px solid green;
+  border-radius: 100%;
+  width: 10px;
+  height: 10px;
+
+  position: absolute;
+}
+
+/* style for messages in DOM */
+.message {
+  opacity: 0%;
+  position: absolute;
+
+  top: 120%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+
+  font-size: 2em;
+  font-weight: 700;
+  color: white;
+}
+.showMessage {
+  opacity: 100%;
+  animation: ease 1.5s messageSlide;
+  z-index: 2;
 }
