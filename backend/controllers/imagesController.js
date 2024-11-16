@@ -115,13 +115,12 @@ const click_post = async (req, res) => {
       if (compare(normalLoc, userClick)) {
         // location successfully matched
         console.log("success 2!");
-        res.send(location.name);
-        return true;
+        return res.send({ success: true });
+      } else {
+        // no location found
+        res.send({ success: false });
       }
     });
-
-    // no location found
-    res.send({ success: false });
   } catch (err) {
     console.error("error in click", err.message);
     return err;
@@ -130,15 +129,16 @@ const click_post = async (req, res) => {
 
 // function for comparison
 function compare(location, click) {
-  console.log(
-    "comparing: " + JSON.stringify(location),
-    "to: " + JSON.stringify(click)
-  );
-  if (location.x == click.x && location.y == click.y) {
+  // TODO: instead of requiring exact, give 3% leeway
+  if (compareRange(location.x, click.x) && compareRange(location.y, click.y)) {
     console.log("success!");
-    return res.send({ success: true });
+    return true;
   } else return false;
   //
+}
+
+function compareRange(x, y) {
+  return Math.abs(x - y) <= 3;
 }
 
 // TODO:
