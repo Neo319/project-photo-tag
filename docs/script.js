@@ -44,8 +44,6 @@ async function fetchImage() {
 
 const begin = document.getElementById("load_img");
 begin.addEventListener("click", async () => {
-  message("Find Waldo!");
-
   img.hidden = false;
   begin.disabled = true;
 
@@ -62,6 +60,14 @@ function launchApp(imgData) {
   let dropdownIsOpen = false;
 
   img.src = imgData.url;
+
+  let names = "";
+  imgData.locations.map((location) => {
+    names = names + `${location.name}, &`;
+  });
+  names = names.substring(0, names.length - 3);
+
+  message(`Find ${names}!`);
 
   const targetBox = document.createElement("div"); // to be used later
   targetBox.id = "targetBox";
