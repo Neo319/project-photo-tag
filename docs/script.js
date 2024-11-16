@@ -147,6 +147,11 @@ function launchApp(imgData) {
       },
       body: clickJSON,
     });
+
+    console.log(fetchResult);
+
+    const result = await fetchResult.json();
+    console.log(result);
   }
 
   // TODO: create function that can normalize click pixel position in various screen sizes.

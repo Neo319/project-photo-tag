@@ -102,7 +102,6 @@ const click_post = async (req, res) => {
         y: normalize(location.y, y),
       };
 
-      console.log(normalLoc);
       console.log(compare(normalLoc, { x: normalClickX, y: normalClickY }));
 
       // compare normalized locations data with normalized user click data
@@ -122,13 +121,13 @@ const click_post = async (req, res) => {
       );
       if (location.x == click.x && location.y == click.y) {
         console.log("success!");
-        return true;
+        return res.send({ success: true });
       } else return false;
       //
     }
 
     // no location found
-    res.send("no location found.");
+    res.send({ success: false });
   } catch (err) {
     console.error("error in click", err.message);
     return err;
@@ -136,7 +135,6 @@ const click_post = async (req, res) => {
 };
 
 // TODO:
-// click_get is buggy and seems to only return success 2, even with wrong coords.
 // NORMALIZE FUNCTION NEEDS WORK.
 
 module.exports = {
