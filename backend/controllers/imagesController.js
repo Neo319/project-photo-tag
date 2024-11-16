@@ -49,13 +49,13 @@ const click_post = async (req, res) => {
         obj?.resolution &&
         typeof obj.resolution.y === "number" &&
         typeof obj.resolution.x === "number" &&
-        typeof obj.imgId === "number"
+        typeof obj.imgId === "number" &&
+        typeof obj.locationName === "string"
       ) {
         console.log("yes");
         return true;
       } else return false;
     }
-    console.log(req.body);
     if (!isValidObject(req.body)) {
       //missing information
 
@@ -65,10 +65,8 @@ const click_post = async (req, res) => {
 
     // NORMALIZE location:
     function normalize(coord, resolution) {
-      return Math.floor((coord / resolution) * 100);
+      return Math.floor((coord / resolution) * 100); // convert to percentage
     }
-
-    console.log(imageId);
 
     // FETCH image resolution
     const image = await prisma.image.findUnique({
@@ -81,21 +79,26 @@ const click_post = async (req, res) => {
       },
     });
 
-    console.log(image);
-
     // the image's resolution
     const x = image.resolution.x;
     const y = image.resolution.y;
-
-    //the locations to compare against
-    const locations = image.locations;
 
     // where the user clicked, normalized
     const normalClickX = normalize(clickX, x);
     const normalClickY = normalize(clickY, y);
 
+    const locationName = req.body.locationName;
+
+    // TODO: reduce mapped code
+    // TODO: only take from locationName
+
     // where comparison occurs
-    locations.map((location) => {
+    image.locations.map((location) => {
+      // -- find the correct location to compare against --
+      if (location.name !== locationName) {
+        return false;
+      }
+
       // ---- LOCATIONS normalized here ----
       const normalLoc = {
         x: normalize(location.x, x),
