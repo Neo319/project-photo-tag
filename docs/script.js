@@ -3,7 +3,6 @@ const DB_URL = "http://localhost:2000";
 import success from "./modules/success.js";
 import message from "./modules/message.js";
 
-let imageData = null;
 let imgId = null;
 let clickTarget = {};
 let locationName = null;
