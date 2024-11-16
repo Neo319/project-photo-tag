@@ -52,7 +52,6 @@ const click_post = async (req, res) => {
         typeof obj.imgId === "number" &&
         typeof obj.locationName === "string"
       ) {
-        console.log("yes");
         return true;
       } else return false;
     }
@@ -79,13 +78,19 @@ const click_post = async (req, res) => {
       },
     });
 
-    // the image's resolution
-    const x = image.resolution.x;
-    const y = image.resolution.y;
+    // --GETTING NORMALIZED USER CLICK:
+    const userClick = (() => {
+      // the client's resolution
+      const clientRes = req.body.resolution;
 
-    // where the user clicked, normalized
-    const normalClickX = normalize(clickX, x);
-    const normalClickY = normalize(clickY, y);
+      // where the user clicked, normalized
+      const normalClickLoc = {
+        x: normalize(clickX, clientRes.x),
+        y: normalize(clickY, clientRes.y),
+      };
+      return normalClickLoc;
+    })();
+    console.log("user click: ", userClick);
 
     const locationName = req.body.locationName;
 
@@ -99,35 +104,21 @@ const click_post = async (req, res) => {
         return false;
       }
 
-      // ---- LOCATIONS normalized here ----
+      // ---- LOCATION normalized here ----
       const normalLoc = {
-        x: normalize(location.x, x),
-        y: normalize(location.y, y),
+        x: normalize(location.x, image.resolution.x),
+        y: normalize(location.y, image.resolution.y),
       };
-
-      console.log(compare(normalLoc, { x: normalClickX, y: normalClickY }));
+      console.log("location value: ", normalLoc);
 
       // compare normalized locations data with normalized user click data
-      if (compare(normalLoc, { x: normalClickX, y: normalClickY })) {
+      if (compare(normalLoc, userClick)) {
         // location successfully matched
         console.log("success 2!");
         res.send(location.name);
         return true;
       }
     });
-
-    // function for comparison
-    function compare(location, click) {
-      console.log(
-        "comparing: " + JSON.stringify(location),
-        "to: " + JSON.stringify(click)
-      );
-      if (location.x == click.x && location.y == click.y) {
-        console.log("success!");
-        return res.send({ success: true });
-      } else return false;
-      //
-    }
 
     // no location found
     res.send({ success: false });
@@ -136,6 +127,19 @@ const click_post = async (req, res) => {
     return err;
   }
 };
+
+// function for comparison
+function compare(location, click) {
+  console.log(
+    "comparing: " + JSON.stringify(location),
+    "to: " + JSON.stringify(click)
+  );
+  if (location.x == click.x && location.y == click.y) {
+    console.log("success!");
+    return res.send({ success: true });
+  } else return false;
+  //
+}
 
 // TODO:
 // NORMALIZE FUNCTION NEEDS WORK.
