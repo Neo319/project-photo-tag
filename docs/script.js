@@ -3,6 +3,7 @@ const DB_URL = "http://localhost:2000";
 let imageData = null;
 let imgId = null;
 let clickTarget = {};
+let locationName = null;
 
 // DOM pieces
 const mainDiv = document.getElementById("main");
@@ -122,6 +123,15 @@ function launchApp(imgData) {
   dropdown.addEventListener("change", (e) => {
     // get click data and send db query
 
+    if (!dropdown.value) {
+      console.log("not a valid selection");
+      return false;
+    }
+
+    // retrieve location name & reset
+    locationName = dropdown.value;
+    dropdown.selectedIndex = 0; // reset selection
+
     const click = {
       click: {
         x: clickTarget.offsetX,
@@ -132,6 +142,7 @@ function launchApp(imgData) {
         y: parseInt(img.height),
       },
       imgId,
+      locationName,
     };
 
     verify(click);
