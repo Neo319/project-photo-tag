@@ -1,4 +1,4 @@
-const DB_URL = "http://localhost:2000";
+const DB_URL = "https://project-photo-tag-production.up.railway.app";
 
 import success from "./modules/success.js";
 import message from "./modules/message.js";
