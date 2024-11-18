@@ -58,7 +58,9 @@ begin.addEventListener("click", async () => {
 function launchApp(imgData) {
   let dropdownIsOpen = false;
 
-  img.src = imgData.url;
+  //src modified for deployment debug
+  const modifiedSrc = imgData.url.substring(1);
+  img.src = modifiedSrc;
 
   let names = "";
   imgData.locations.map((location) => {
