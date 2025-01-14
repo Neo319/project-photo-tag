@@ -17,7 +17,9 @@ It is primarily intended to practice using node.JS to manage interactions betwee
 
 ## Deployment
 
-This project's deployment remains a WIP.
+This project's backend is deployed on Railway, and its front end is deployed on GitHub pages.
+
+[See Live Preview here.](https://neo319.github.io/project-photo-tag/)
 
 ## Usage
 
